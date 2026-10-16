@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'jogos/style.css' %}">
+    <title>Equipes | SGJogos</title>
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="conteudo">
+            <a class="marca" href="index.html">
+                <strong>SGJogos</strong>
+                <span>Jogos Interclasses 2026 · IFRN Campus Pau dos Ferros</span>
+            </a>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{% url 'index' %}">Equipes</a></li>
+                    <li><a href="/admin">Administração</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="conteudo">
+        <header class="topo">
+            <span class="sobretitulo">Jogos Interclasses 2026</span>
+            <h1>Equipes inscritas</h1>
+            <p class="descricao">Conheça as equipes que disputam os Jogos Interclasses do campus.</p>
+        </header>
+
+        <div class="busca">
+            <label for="busca">Buscar equipe</label>
+            <input type="search" id="busca" placeholder="Digite o nome da equipe">
+        </div>
+
+        <section class="grade" id="lista-equipes">
+            {% for equipe in equipes %}
+                <article class="card" style="border-top-color: {{equipe.cor}};">
+                    <h3>{{equipe}}</h3>
+                    <dl>
+                        <dt>Curso</dt>
+                        <dd>{{equipe.curso}}</dd>
+                        <dt>Técnico</dt>
+                        <dd>{{equipe.tecnico}}</dd>
+                        <dt>Atletas</dt>
+                        {% if equipe.tecnico %}
+                        <dd>{{equipe.atletas.count}}</dd>
+                        {% else %}
+                        <dd>Não definido.</dd>
+                        {% endif %}
+                    </dl>
+                    <a class="link" href="{% url 'equipe' equipe.id %}">Ver equipe</a>
+                </article>
+            {% endfor %}
+        </section>
+
+        <p class="sem-resultado" id="sem-resultado" hidden>Nenhuma equipe encontrada.</p>
+
+        <h2>Modalidades</h2>
+        <ul class="lista-modalidades">
+            {% for modalidade in modalidades %}
+            <li><a href="{% url 'modalidade' modalidade.id %}">{{modalidade}}</a></li>
+            {% endfor %}
+        </ul>
+    </main>
+
+    <footer class="rodape">
+        <div class="conteudo">
+            <p>SGJogos · Desenvolvimento de Sistemas Web</p>
+            <p>IFRN Campus Pau dos Ferros · 2026</p>
+        </div>
+    </footer>
+</body>
+</html>

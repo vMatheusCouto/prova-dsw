@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'jogos/style.css' %}">
+    <title>{{equipe}}</title>
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="conteudo">
+            <a class="marca" href="{% url 'index' %}">
+                <strong>SGJogos</strong>
+                <span>Jogos Interclasses 2026 · IFRN Campus Pau dos Ferros</span>
+            </a>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{% url 'index' %}">Equipes</a></li>
+                    <li><a href="/admin">Administração</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="conteudo">
+        <nav class="trilha"><a href="{% url 'index' %}">Equipes</a> / {{equipe}}</nav>
+
+        <header class="topo">
+            <span class="sobretitulo">Equipe</span>
+            <h1>{{equipe}}</h1>
+            <p class="descricao">{{equipe.curso}}</p>
+        </header>
+
+        <h2>Técnico</h2>
+        {% if equipe.tecnico %}
+        <dl class="numeros ficha">
+            <div>
+                <dt>Nome</dt>
+                <dd>{{equipe.tecnico}}</dd>
+            </div>
+            <div>
+                <dt>E-mail</dt>
+                <dd>{{equipe.tecnico.email}}</dd>
+            </div>
+            <div>
+                <dt>Telefone</dt>
+                <dd>{{equipe.tecnico.telefone}}</dd>
+            </div>
+        </dl>
+
+        {% else %}
+        <p class="aviso">Esta equipe ainda não tem técnico cadastrado.</p>
+        {% endif %}
+
+        <h2>Atletas</h2>
+        <div class="tabela">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Matrícula</th>
+                        <th>Modalidades</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for atleta in equipe.atletas.all %}
+                    <tr>
+                        <td>{{atleta.nome}}</td>
+                        <td>{{atleta.matricula}}</td>
+                        <td>
+                            <ul class="modalidades">
+                                {% for modalidade in atleta.modalidades.all %}
+                                    {% if modalidade.tipo == "individual" %}
+                                        <li><a class="individual" href="{% url 'modalidade' modalidade.id %}">{{ modalidade }}</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'modalidade' modalidade.id %}">{{ modalidade }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td class="vazio" colspan="3">Nenhum atleta inscrito.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer class="rodape">
+        <div class="conteudo">
+            <p>SGJogos · Desenvolvimento de Sistemas Web</p>
+            <p>IFRN Campus Pau dos Ferros · 2026</p>
+        </div>
+    </footer>
+</body>
+</html>
